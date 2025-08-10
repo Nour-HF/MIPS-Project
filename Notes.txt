@@ -1,0 +1,48 @@
+File structure:
+
+        mips-project/
+        ├── include/
+        │   ├── machine_state.h
+        │   ├── instruction.h
+        │   ├── assembler.h
+        │   ├── interpreter.h
+        │   ├── executor.h
+        │   └── parser.h
+        ├── src/
+        │   ├── core/
+        │   │   ├── machine_state.cpp
+        │   │   └── instruction.cpp
+        │   ├── parser/
+        │   │   └── parser.cpp
+        │   ├── assembler/
+        │   │   └── assembler.cpp
+        │   ├── interpreter/
+        │   │   └── interpreter.cpp
+        │   ├── executor/
+        │   │   └── executor.cpp
+        │   └── main/
+        │       ├── main_assemler.cpp
+        │       ├── main_interpreter.cpp
+        │       └── main_executor.cpp
+        ├── tests/
+        │   ├── test_machine_state.cpp
+        │   ├── test_parser.cpp
+        │   └── test_instruction.cpp         
+        └── examples/       
+
+commands:
+        test_machine_state
+                g++ -std=c++17 -Wall -Wextra -o test_machine_state tests/test_machine_state.cpp src/core/machine_state.cpp
+        test_instruction
+                g++ -std=c++17 -Wall -Wextra -o test_instruction tests/test_instruction.cpp src/core/instruction.cpp src/core/machine_state.cpp
+        test_parser
+                g++ -std=c++17 -Wall -Wextra -o test_parser tests/test_parser.cpp src/parser/parser.cpp src/core/instruction.cpp src/core/machine_state.cpp
+
+
+
+        main assembler
+                g++ -std=c++17 -Wall -Wextra -Iinclude -o mips-assemble src/parser/parser.cpp src/assembler/assembler.cpp src/core/instruction.cpp src/core/machine_state.cpp src/main/main_assembler.cpp
+        main interpreter
+                g++ -std=c++17 -Wall -Wextra -Iinclude -o mips-interpret src/parser/parser.cpp src/interpreter/interpreter.cpp src/core/machine_state.cpp src/core/instruction.cpp src/main/main_interpreter.cpp
+        main executor
+                g++ -std=c++17 -Wall -Wextra -Iinclude -o mips-execute src/parser/parser.cpp src/executor/executor.cpp src/core/machine_state.cpp src/core/instruction.cpp src/main/main_executor.cpp        
