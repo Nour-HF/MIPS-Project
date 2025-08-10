@@ -30,7 +30,13 @@ File structure:
         │   └── test_instruction.cpp         
         └── examples/       
 
+
+
 commands:
+        cmake .
+
+
+
         test_machine_state
                 g++ -std=c++17 -Wall -Wextra -o test_machine_state tests/test_machine_state.cpp src/core/machine_state.cpp
         test_instruction

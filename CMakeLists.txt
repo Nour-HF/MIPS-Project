@@ -34,21 +34,21 @@ set(EXECUTOR_SOURCES
 )
 
 # Main executables
-add_executable(main_assembler
-    src/main/main_assemler.cpp
+add_executable(mips_assembler
+    src/main/main_assembler.cpp
     ${CORE_SOURCES}
     ${PARSER_SOURCES}
     ${ASSEMBLER_SOURCES}
 )
 
-add_executable(main_interpreter
+add_executable(mips_interpreter
     src/main/main_interpreter.cpp
     ${CORE_SOURCES}
     ${PARSER_SOURCES}
     ${INTERPRETER_SOURCES}
 )
 
-add_executable(main_executor
+add_executable(mips_executor
     src/main/main_executor.cpp
     ${CORE_SOURCES}
     ${EXECUTOR_SOURCES}
