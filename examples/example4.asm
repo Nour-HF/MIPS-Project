@@ -1,7 +1,8 @@
-    .data
+.data
 msg: .asciiz "Hello World\n"
 
-    .text
+.text
 main:
-    addi $a0, $zero, msg   # address of string
-    trap  2
+    addi $a0, $zero, 12     # msg starts at address 8 (after 2 instructions)
+    trap 2                 # print_string
+    trap 5

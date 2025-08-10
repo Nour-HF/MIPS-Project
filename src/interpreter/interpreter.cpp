@@ -51,7 +51,7 @@ machine_state Interpreter::run_stream(std::istream& input, uint64_t max_steps) {
         InstructionFormat fmt = InstructionUtils::get_format(instr);
         if (fmt == InstructionFormat::I_TYPE) {
             IInstruction iinstr = std::get<IInstruction>(instr);
-            if (iinstr.opcode == Opcode::TRAP) {
+            if (iinstr.opcode == Opcode::TRAP && iinstr.immediate == 5) {
                 break;
             }
         }

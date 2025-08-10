@@ -111,10 +111,12 @@ machine_state Executor::run_stream(std::istream& in, uint64_t max_steps, bool ve
         }
 
         // check TRAP
-        bool is_trap = false;
+        bool is_exit_trap = false;
         if (InstructionUtils::get_format(instr) == InstructionFormat::I_TYPE) {
             IInstruction ii = std::get<IInstruction>(instr);
-            if (ii.opcode == Opcode::TRAP) is_trap = true;
+            if (ii.opcode == Opcode::TRAP && ii.immediate == 5) {
+                is_exit_trap = true;  // Only mark as exit for trap 5
+            }
         }
 
         uint32_t old_pc = pc;
@@ -124,7 +126,7 @@ machine_state Executor::run_stream(std::istream& in, uint64_t max_steps, bool ve
             state.increment_pc();
         }
 
-        if (is_trap) break;
+        if (is_exit_trap) break;
     }
 
     if (header_found && verbose) {

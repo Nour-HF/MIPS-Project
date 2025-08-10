@@ -790,12 +790,13 @@ void InstructionExecutor::handle_syscall(machine_state& state, Syscall syscall_n
     switch (syscall_num) {
         case Syscall::PRINT_INT: {
             int32_t value = static_cast<int32_t>(state.get_register(Register::A0));
-            output_stream << value;
+            output_stream << value << std::flush;  // Add flush
             break;
         }
         case Syscall::PRINT_CHARACTER: {
             char ch = static_cast<char>(state.get_register(Register::A0) & 0xFF);
             output_stream << ch;
+            output_stream.flush();  // Add flush
             break;
         }
         case Syscall::PRINT_STRING: {
@@ -807,40 +808,29 @@ void InstructionExecutor::handle_syscall(machine_state& state, Syscall syscall_n
                     output_stream << static_cast<char>(ch);
                     addr++;
                 }
+                output_stream.flush();  // Add flush
             } catch (const std::out_of_range&) {
                 throw std::runtime_error("Memory access violation in print_string syscall");
             }
             break;
         }
         case Syscall::READ_INT: {
-            // Use getline so the syscall blocks until a newline and works with piping (echo 7 | ...)
-            std::string line;
-            if (!std::getline(input_stream, line)) {
-                // EOF or error: set return to 0
-                state.set_register(Register::V0, 0u);
-            } else {
-                // parse integer from the line (robust: ignores trailing spaces)
-                std::istringstream iss(line);
-                long long val = 0;
-                iss >> val; // if parse fails, val remains 0
-                state.set_register(Register::V0, static_cast<uint32_t>(val));
-            }
+            int32_t val;
+            input_stream >> val;
+            state.set_register(Register::V0, static_cast<uint32_t>(val));
             break;
         }
         case Syscall::READ_CHARACTER: {
-            // read single byte (blocking); handle EOF gracefully
-            int ch = input_stream.get();
-            if (ch == EOF) {
-                state.set_register(Register::V0, 0u);
-            } else {
-                state.set_register(Register::V0, static_cast<uint32_t>(ch & 0xFF));
-            }
+            char ch;
+            input_stream.get(ch);
+            state.set_register(Register::V0, static_cast<uint32_t>(ch & 0xFF));
             break;
         }
         case Syscall::EXIT: {
-            throw std::runtime_error("Program terminated by exit syscall");
+            break;
         }
         default:
             throw std::runtime_error("Unknown syscall: " + std::to_string(static_cast<int>(syscall_num)));
     }
+
 }
